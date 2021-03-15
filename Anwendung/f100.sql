@@ -28,7 +28,7 @@ prompt APPLICATION 100 - Stechuhr
 -- Application Export:
 --   Application:     100
 --   Name:            Stechuhr
---   Date and Time:   16:23 Sonntag März 14, 2021
+--   Date and Time:   14:52 Montag März 15, 2021
 --   Exported By:     CHHAPEX
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -59,7 +59,7 @@ prompt APPLICATION 100 - Stechuhr
 --           Breadcrumb:           1
 --           Button:               3
 --           Report:              11
---         LOVs:                   1
+--         LOVs:                   2
 --         Shortcuts:              1
 --       Globalization:
 --       Reports:
@@ -114,7 +114,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Stechuhr'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210314161753'
+,p_last_upd_yyyymmddhh24miss=>'20210315145102'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -392,6 +392,25 @@ wwv_flow_api.create_static_lov_data(
 ,p_lov_disp_sequence=>10
 ,p_lov_disp_value=>'Remember username'
 ,p_lov_return_value=>'Y'
+);
+end;
+/
+prompt --application/shared_components/user_interface/lovs/lov_projekte
+begin
+wwv_flow_api.create_list_of_values(
+ p_id=>wwv_flow_api.id(22349869095243804)
+,p_lov_name=>'LOV_PROJEKTE'
+,p_lov_query=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'select',
+'  name as d,',
+'  id as r',
+'from su_projekt;'))
+,p_source_type=>'SQL'
+,p_location=>'LOCAL'
+,p_return_column_name=>'R'
+,p_display_column_name=>'D'
+,p_default_sort_column_name=>'D'
+,p_default_sort_direction=>'ASC'
 );
 end;
 /
@@ -11706,7 +11725,7 @@ wwv_flow_api.create_page(
 ,p_navigation_list_template_id=>wwv_flow_api.id(16766367043921946)
 ,p_nav_list_template_options=>'#DEFAULT#:js-navCollapsed--hidden:t-TreeNav--styleA'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210314152535'
+,p_last_upd_yyyymmddhh24miss=>'20210315145102'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(22193762863745781)
@@ -11772,16 +11791,22 @@ wwv_flow_api.create_region_column(
 ,p_source_expression=>'PROJEKT_ID'
 ,p_data_type=>'NUMBER'
 ,p_is_query_only=>false
-,p_item_type=>'NATIVE_NUMBER_FIELD'
+,p_item_type=>'NATIVE_SELECT_LIST'
 ,p_heading=>'Projekt Id'
-,p_heading_alignment=>'RIGHT'
+,p_heading_alignment=>'LEFT'
 ,p_display_sequence=>30
-,p_value_alignment=>'RIGHT'
-,p_attribute_03=>'right'
+,p_value_alignment=>'LEFT'
 ,p_is_required=>true
+,p_lov_type=>'SHARED'
+,p_lov_id=>wwv_flow_api.id(22349869095243804)
+,p_lov_display_extra=>true
+,p_lov_display_null=>true
 ,p_enable_filter=>true
+,p_filter_operators=>'C:S:CASE_INSENSITIVE:REGEXP'
 ,p_filter_is_required=>false
-,p_filter_lov_type=>'NONE'
+,p_filter_text_case=>'MIXED'
+,p_filter_exact_match=>true
+,p_filter_lov_type=>'LOV'
 ,p_use_as_row_header=>false
 ,p_enable_sort_group=>true
 ,p_enable_control_break=>true
@@ -11828,7 +11853,7 @@ wwv_flow_api.create_region_column(
 ,p_heading=>'Minuten'
 ,p_heading_alignment=>'RIGHT'
 ,p_display_sequence=>50
-,p_value_alignment=>'RIGHT'
+,p_value_alignment=>'LEFT'
 ,p_attribute_03=>'right'
 ,p_is_required=>false
 ,p_enable_filter=>true
@@ -11926,7 +11951,7 @@ wwv_flow_api.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210314160230'
+,p_last_upd_yyyymmddhh24miss=>'20210315143808'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(22251746888988272)
@@ -12003,16 +12028,22 @@ wwv_flow_api.create_region_column(
 ,p_source_expression=>'PROJEKT_ID'
 ,p_data_type=>'NUMBER'
 ,p_is_query_only=>false
-,p_item_type=>'NATIVE_NUMBER_FIELD'
+,p_item_type=>'NATIVE_SELECT_LIST'
 ,p_heading=>'Projekt Id'
-,p_heading_alignment=>'RIGHT'
+,p_heading_alignment=>'LEFT'
 ,p_display_sequence=>50
-,p_value_alignment=>'RIGHT'
-,p_attribute_03=>'right'
+,p_value_alignment=>'LEFT'
 ,p_is_required=>true
+,p_lov_type=>'SHARED'
+,p_lov_id=>wwv_flow_api.id(22349869095243804)
+,p_lov_display_extra=>true
+,p_lov_display_null=>false
 ,p_enable_filter=>true
+,p_filter_operators=>'C:S:CASE_INSENSITIVE:REGEXP'
 ,p_filter_is_required=>false
-,p_filter_lov_type=>'NONE'
+,p_filter_text_case=>'MIXED'
+,p_filter_exact_match=>true
+,p_filter_lov_type=>'LOV'
 ,p_use_as_row_header=>false
 ,p_enable_sort_group=>true
 ,p_enable_control_break=>true
@@ -12027,7 +12058,7 @@ wwv_flow_api.create_region_column(
 ,p_name=>'START_ZEIT'
 ,p_source_type=>'DB_COLUMN'
 ,p_source_expression=>'START_ZEIT'
-,p_data_type=>'DATE'
+,p_data_type=>'TIMESTAMP_LTZ'
 ,p_is_query_only=>false
 ,p_item_type=>'NATIVE_DATE_PICKER'
 ,p_heading=>'Start Zeit'
@@ -12037,6 +12068,7 @@ wwv_flow_api.create_region_column(
 ,p_attribute_04=>'button'
 ,p_attribute_05=>'N'
 ,p_attribute_07=>'NONE'
+,p_format_mask=>'YYYY-MM-DD HH24:MI:SS'
 ,p_is_required=>true
 ,p_enable_filter=>true
 ,p_filter_is_required=>false
@@ -12066,6 +12098,7 @@ wwv_flow_api.create_region_column(
 ,p_attribute_04=>'button'
 ,p_attribute_05=>'N'
 ,p_attribute_07=>'NONE'
+,p_format_mask=>'YYYY-MM-DD HH24:MI:SS'
 ,p_is_required=>false
 ,p_enable_filter=>true
 ,p_filter_is_required=>false
