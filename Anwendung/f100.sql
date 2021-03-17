@@ -28,7 +28,7 @@ prompt APPLICATION 100 - Stechuhr
 -- Application Export:
 --   Application:     100
 --   Name:            Stechuhr
---   Date and Time:   14:52 Montag März 15, 2021
+--   Date and Time:   14:24 Mittwoch März 17, 2021
 --   Exported By:     CHHAPEX
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -36,8 +36,8 @@ prompt APPLICATION 100 - Stechuhr
 --       Items:                    5
 --       Processes:                7
 --       Regions:                 14
---       Buttons:                  4
---       Dynamic Actions:          5
+--       Buttons:                  5
+--       Dynamic Actions:          6
 --     Shared Components:
 --       Logic:
 --       Navigation:
@@ -114,7 +114,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Stechuhr'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210315145102'
+,p_last_upd_yyyymmddhh24miss=>'20210317142140'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -11025,7 +11025,7 @@ wwv_flow_api.create_page(
 '',
 '<p>Click the <strong>Reset</strong> button to reset the interactive grid back to the default settings.</p>'))
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210306144640'
+,p_last_upd_yyyymmddhh24miss=>'20210316165554'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(16804680285922128)
@@ -11243,7 +11243,7 @@ wwv_flow_api.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210312162535'
+,p_last_upd_yyyymmddhh24miss=>'20210317142139'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(20152002939264025)
@@ -11526,6 +11526,21 @@ wwv_flow_api.create_page_button(
 ,p_grid_new_row=>'N'
 ,p_grid_new_column=>'N'
 );
+wwv_flow_api.create_page_button(
+ p_id=>wwv_flow_api.id(21753082337936331)
+,p_button_sequence=>40
+,p_button_plug_id=>wwv_flow_api.id(20152107753264026)
+,p_button_name=>'Aktualisieren'
+,p_button_action=>'DEFINED_BY_DA'
+,p_button_template_options=>'#DEFAULT#'
+,p_button_template_id=>wwv_flow_api.id(16769526542921955)
+,p_button_image_alt=>'Aktualisieren'
+,p_button_position=>'BODY'
+,p_button_execute_validations=>'N'
+,p_warn_on_unsaved_changes=>null
+,p_grid_new_row=>'N'
+,p_grid_new_column=>'N'
+);
 wwv_flow_api.create_page_item(
  p_id=>wwv_flow_api.id(20153487768264039)
 ,p_name=>'P4_ID_AUSGEWAEHLTES_PROJEKT'
@@ -11692,6 +11707,25 @@ wwv_flow_api.create_page_da_action(
 ,p_action=>'NATIVE_DISABLE'
 ,p_affected_elements_type=>'BUTTON'
 ,p_affected_button_id=>wwv_flow_api.id(20152349414264028)
+);
+wwv_flow_api.create_page_da_event(
+ p_id=>wwv_flow_api.id(21753186927936332)
+,p_name=>'Aktualisieren'
+,p_event_sequence=>50
+,p_triggering_element_type=>'BUTTON'
+,p_triggering_button_id=>wwv_flow_api.id(21753082337936331)
+,p_bind_type=>'bind'
+,p_bind_event_type=>'click'
+);
+wwv_flow_api.create_page_da_action(
+ p_id=>wwv_flow_api.id(21753260543936333)
+,p_event_id=>wwv_flow_api.id(21753186927936332)
+,p_event_result=>'TRUE'
+,p_action_sequence=>10
+,p_execute_on_page_init=>'N'
+,p_action=>'NATIVE_REFRESH'
+,p_affected_elements_type=>'REGION'
+,p_affected_region_id=>wwv_flow_api.id(21261366688776358)
 );
 wwv_flow_api.create_page_process(
  p_id=>wwv_flow_api.id(21751980831936320)
@@ -11951,7 +11985,7 @@ wwv_flow_api.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210315143808'
+,p_last_upd_yyyymmddhh24miss=>'20210316134339'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(22251746888988272)
