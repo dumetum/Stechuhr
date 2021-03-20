@@ -28,7 +28,7 @@ prompt APPLICATION 103 - Erinnerung
 -- Application Export:
 --   Application:     103
 --   Name:            Erinnerung
---   Date and Time:   13:57 Samstag März 20, 2021
+--   Date and Time:   15:32 Samstag März 20, 2021
 --   Exported By:     CHHAPEX
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -36,7 +36,7 @@ prompt APPLICATION 103 - Erinnerung
 --       Items:                    3
 --       Processes:                5
 --       Regions:                  3
---       Buttons:                  1
+--       Buttons:                  2
 --     Shared Components:
 --       Logic:
 --       Navigation:
@@ -113,7 +113,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Erinnerung'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210320135614'
+,p_last_upd_yyyymmddhh24miss=>'20210320152019'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -10842,10 +10842,11 @@ wwv_flow_api.create_page(
 ,p_name=>'Home'
 ,p_alias=>'HOME'
 ,p_step_title=>'Erinnerung'
+,p_warn_on_unsaved_changes=>'N'
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210320135614'
+,p_last_upd_yyyymmddhh24miss=>'20210320152019'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(46060962539000447)
@@ -10985,6 +10986,18 @@ wwv_flow_api.create_ig_report_column(
 ,p_column_id=>wwv_flow_api.id(44806712385598809)
 ,p_is_visible=>true
 ,p_is_frozen=>false
+);
+wwv_flow_api.create_page_button(
+ p_id=>wwv_flow_api.id(21754300390936344)
+,p_button_sequence=>10
+,p_button_plug_id=>wwv_flow_api.id(46060962539000447)
+,p_button_name=>'Abbrechen'
+,p_button_action=>'REDIRECT_PAGE'
+,p_button_template_options=>'#DEFAULT#'
+,p_button_template_id=>wwv_flow_api.id(22970937915321871)
+,p_button_image_alt=>'Abbrechen'
+,p_button_position=>'REGION_TEMPLATE_NEXT'
+,p_button_redirect_url=>'f?p=&APP_ID.:1:&SESSION.::&DEBUG.:::'
 );
 wwv_flow_api.create_page_process(
  p_id=>wwv_flow_api.id(21754258375936343)
