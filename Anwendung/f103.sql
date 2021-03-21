@@ -28,7 +28,7 @@ prompt APPLICATION 103 - Erinnerung
 -- Application Export:
 --   Application:     103
 --   Name:            Erinnerung
---   Date and Time:   15:32 Samstag März 20, 2021
+--   Date and Time:   15:48 Sonntag März 21, 2021
 --   Exported By:     CHHAPEX
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -113,7 +113,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Erinnerung'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210320152019'
+,p_last_upd_yyyymmddhh24miss=>'20210321154223'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -10846,7 +10846,7 @@ wwv_flow_api.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210320152019'
+,p_last_upd_yyyymmddhh24miss=>'20210321154223'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(46060962539000447)
@@ -10863,12 +10863,6 @@ wwv_flow_api.create_page_plug(
 ,p_plug_source_type=>'NATIVE_IG'
 ,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
 ,p_prn_page_header=>'Erinnerungen'
-);
-wwv_flow_api.create_region_column(
- p_id=>wwv_flow_api.id(44806712385598809)
-,p_name=>'APEX$ROW_ACTION'
-,p_item_type=>'NATIVE_ROW_ACTION'
-,p_display_sequence=>20
 );
 wwv_flow_api.create_region_column(
  p_id=>wwv_flow_api.id(46063257474000686)
@@ -10945,6 +10939,24 @@ wwv_flow_api.create_interactive_grid(
 ,p_fixed_header=>'PAGE'
 ,p_show_icon_view=>false
 ,p_show_detail_view=>false
+,p_javascript_code=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'function(config) {',
+'    let $ = apex.jQuery,',
+'    toolbarData = $.apex.interactiveGrid.copyDefaultToolbar(),     // copy the whole toolbar',
+'    // this is the group with the action=add row',
+'    toolbarGroup = toolbarData.toolbarFind("actions3");',
+'',
+'toolbarGroup.controls.push({',
+'                type: "BUTTON",',
+'                action: "selection-delete",',
+'                icon: "icon-ig-delete",     // alternative FontAwesome icon: "fa fa-trash",',
+'                iconBeforeLabel: true,',
+'                hot: true',
+'                 });',
+'',
+'    config.toolbarData = toolbarData;',
+'    return config;',
+'}'))
 );
 wwv_flow_api.create_ig_report(
  p_id=>wwv_flow_api.id(46061945375000450)
@@ -10979,19 +10991,12 @@ wwv_flow_api.create_ig_report_column(
 ,p_is_visible=>true
 ,p_is_frozen=>false
 );
-wwv_flow_api.create_ig_report_column(
- p_id=>wwv_flow_api.id(46069482963661576)
-,p_view_id=>wwv_flow_api.id(46062063833000451)
-,p_display_seq=>0
-,p_column_id=>wwv_flow_api.id(44806712385598809)
-,p_is_visible=>true
-,p_is_frozen=>false
-);
 wwv_flow_api.create_page_button(
  p_id=>wwv_flow_api.id(21754300390936344)
-,p_button_sequence=>10
+,p_button_sequence=>20
 ,p_button_plug_id=>wwv_flow_api.id(46060962539000447)
 ,p_button_name=>'Abbrechen'
+,p_button_static_id=>'erinnerungen'
 ,p_button_action=>'REDIRECT_PAGE'
 ,p_button_template_options=>'#DEFAULT#'
 ,p_button_template_id=>wwv_flow_api.id(22970937915321871)
