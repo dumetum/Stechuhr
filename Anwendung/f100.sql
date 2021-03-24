@@ -28,7 +28,7 @@ prompt APPLICATION 100 - Stechuhr
 -- Application Export:
 --   Application:     100
 --   Name:            Stechuhr
---   Date and Time:   19:23 Dienstag März 23, 2021
+--   Date and Time:   18:18 Mittwoch März 24, 2021
 --   Exported By:     CHHAPEX
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -115,7 +115,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Stechuhr'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210323192125'
+,p_last_upd_yyyymmddhh24miss=>'20210324181601'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -11717,7 +11717,7 @@ wwv_flow_api.create_page(
 ,p_navigation_list_template_id=>wwv_flow_api.id(16766367043921946)
 ,p_nav_list_template_options=>'#DEFAULT#:js-navCollapsed--hidden:t-TreeNav--styleA'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210323192125'
+,p_last_upd_yyyymmddhh24miss=>'20210324181601'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(22193762863745781)
@@ -11741,11 +11741,14 @@ wwv_flow_api.create_page_plug(
 ,p_plug_grid_column_span=>4
 ,p_plug_display_column=>1
 ,p_plug_display_point=>'BODY'
-,p_query_type=>'TABLE'
-,p_query_table=>'VW_SU_AUSW_ZEIT_AGGR_TAG'
-,p_query_where=>'tag >= :P8_VON and tag <= :P8_BIS'
-,p_query_order_by=>'TAG desc'
-,p_include_rowid_column=>false
+,p_query_type=>'SQL'
+,p_plug_source=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'select TAG,',
+'       PROJEKT_ID,',
+'       STUNDEN,',
+'       MINUTEN',
+'  from fn_su_ausw_zeit_aggr_tag(:P8_VON,:P8_BIS)',
+';'))
 ,p_plug_source_type=>'NATIVE_IG'
 ,p_ajax_items_to_submit=>'P8_VON,P8_BIS'
 ,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
@@ -11935,10 +11938,13 @@ wwv_flow_api.create_ig_report_view(
 wwv_flow_api.create_ig_report_column(
  p_id=>wwv_flow_api.id(22197069730745787)
 ,p_view_id=>wwv_flow_api.id(22195437962745782)
-,p_display_seq=>2
+,p_display_seq=>1
 ,p_column_id=>wwv_flow_api.id(22196620992745787)
 ,p_is_visible=>true
 ,p_is_frozen=>false
+,p_sort_order=>1
+,p_sort_direction=>'DESC'
+,p_sort_nulls=>'FIRST'
 );
 wwv_flow_api.create_ig_report_column(
  p_id=>wwv_flow_api.id(22198055359745788)
@@ -11978,10 +11984,16 @@ wwv_flow_api.create_page_plug(
 ,p_plug_grid_column_span=>6
 ,p_plug_display_column=>1
 ,p_plug_display_point=>'BODY'
-,p_query_type=>'TABLE'
-,p_query_table=>'VW_SU_AUSW_ZEIT_AGGR_WOCHE'
-,p_query_order_by=>'woche desc'
-,p_include_rowid_column=>false
+,p_query_type=>'SQL'
+,p_plug_source=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'select WOCHE,',
+'       ERSTER_WOCHENTAG,',
+'       LETZTER_WOCHENTAG,',
+'       PROJEKT_ID,',
+'       STUNDEN,',
+'       MINUTEN',
+'  from fn_su_ausw_zeit_aggr_woche(:P8_VON,:P8_BIS)',
+' '))
 ,p_plug_source_type=>'NATIVE_IG'
 ,p_ajax_items_to_submit=>'P8_VON,P8_BIS'
 ,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
@@ -12227,6 +12239,9 @@ wwv_flow_api.create_ig_report_column(
 ,p_is_visible=>true
 ,p_is_frozen=>false
 ,p_width=>67
+,p_sort_order=>1
+,p_sort_direction=>'DESC'
+,p_sort_nulls=>'FIRST'
 );
 wwv_flow_api.create_ig_report_column(
  p_id=>wwv_flow_api.id(23260136571655112)
@@ -12282,10 +12297,14 @@ wwv_flow_api.create_page_plug(
 ,p_plug_grid_column_span=>4
 ,p_plug_display_column=>1
 ,p_plug_display_point=>'BODY'
-,p_query_type=>'TABLE'
-,p_query_table=>'VW_SU_AUSW_ZEIT_AGGR_MONAT'
-,p_query_order_by=>'monat desc'
-,p_include_rowid_column=>false
+,p_query_type=>'SQL'
+,p_plug_source=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'select MONAT,',
+'       PROJEKT_ID,',
+'       STUNDEN,',
+'       MINUTEN',
+'  from fn_su_ausw_zeit_aggr_monat(:P8_VON,:P8_BIS)',
+' '))
 ,p_plug_source_type=>'NATIVE_IG'
 ,p_ajax_items_to_submit=>'P8_VON,P8_BIS'
 ,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
@@ -12475,6 +12494,9 @@ wwv_flow_api.create_ig_report_column(
 ,p_is_visible=>true
 ,p_is_frozen=>false
 ,p_width=>66
+,p_sort_order=>1
+,p_sort_direction=>'DESC'
+,p_sort_nulls=>'FIRST'
 );
 wwv_flow_api.create_ig_report_column(
  p_id=>wwv_flow_api.id(23267801010694419)
@@ -12514,9 +12536,12 @@ wwv_flow_api.create_page_plug(
 ,p_plug_grid_column_span=>3
 ,p_plug_display_column=>1
 ,p_plug_display_point=>'BODY'
-,p_query_type=>'TABLE'
-,p_query_table=>'VW_SU_AUSW_ZEIT_AGGR_TOTAL'
-,p_include_rowid_column=>false
+,p_query_type=>'SQL'
+,p_plug_source=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'select PROJEKT_ID,',
+'       STUNDEN,',
+'       MINUTEN',
+'  from fn_su_ausw_zeit_aggr_monat(:P8_VON,:P8_BIS)'))
 ,p_plug_source_type=>'NATIVE_IG'
 ,p_ajax_items_to_submit=>'P8_VON,P8_BIS'
 ,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
@@ -12698,7 +12723,7 @@ wwv_flow_api.create_ig_report_column(
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(23254911149648821)
-,p_plug_name=>'Steuerung'
+,p_plug_name=>'Auswahl'
 ,p_region_template_options=>'#DEFAULT#:t-Region--scrollBody'
 ,p_plug_template=>wwv_flow_api.id(16707048190921895)
 ,p_plug_display_sequence=>10
@@ -12730,7 +12755,7 @@ wwv_flow_api.create_page_item(
 ,p_name=>'P8_VON'
 ,p_item_sequence=>20
 ,p_item_plug_id=>wwv_flow_api.id(23254911149648821)
-,p_prompt=>'Von'
+,p_prompt=>'Ereignisse von'
 ,p_display_as=>'NATIVE_DATE_PICKER'
 ,p_cSize=>30
 ,p_begin_on_new_line=>'N'
@@ -12746,7 +12771,7 @@ wwv_flow_api.create_page_item(
 ,p_name=>'P8_BIS'
 ,p_item_sequence=>30
 ,p_item_plug_id=>wwv_flow_api.id(23254911149648821)
-,p_prompt=>'Bis'
+,p_prompt=>'Ereignisse bis'
 ,p_display_as=>'NATIVE_DATE_PICKER'
 ,p_cSize=>30
 ,p_begin_on_new_line=>'N'
@@ -12793,6 +12818,9 @@ wwv_flow_api.create_page_da_event(
 ,p_bind_type=>'bind'
 ,p_bind_event_type=>'change'
 );
+end;
+/
+begin
 wwv_flow_api.create_page_da_action(
  p_id=>wwv_flow_api.id(23255184824648823)
 ,p_event_id=>wwv_flow_api.id(23255074557648822)
@@ -12813,9 +12841,6 @@ wwv_flow_api.create_page_da_action(
 ,p_affected_elements_type=>'REGION'
 ,p_affected_region_id=>wwv_flow_api.id(23252924105648801)
 );
-end;
-/
-begin
 wwv_flow_api.create_page_da_event(
  p_id=>wwv_flow_api.id(23255373384648825)
 ,p_name=>'Tag'
