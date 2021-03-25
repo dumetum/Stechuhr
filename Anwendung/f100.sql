@@ -28,17 +28,17 @@ prompt APPLICATION 100 - Stechuhr
 -- Application Export:
 --   Application:     100
 --   Name:            Stechuhr
---   Date and Time:   18:18 Mittwoch März 24, 2021
+--   Date and Time:   18:52 Donnerstag März 25, 2021
 --   Exported By:     CHHAPEX
 --   Flashback:       0
 --   Export Type:     Application Export
 --     Pages:                      7
---       Items:                    8
+--       Items:                    9
 --       Computations:             3
 --       Processes:                7
 --       Regions:                 18
 --       Buttons:                  5
---       Dynamic Actions:         11
+--       Dynamic Actions:         13
 --     Shared Components:
 --       Logic:
 --       Navigation:
@@ -115,7 +115,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Stechuhr'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210324181601'
+,p_last_upd_yyyymmddhh24miss=>'20210325183457'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -11244,7 +11244,7 @@ wwv_flow_api.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210320152951'
+,p_last_upd_yyyymmddhh24miss=>'20210325183457'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(20152002939264025)
@@ -11477,7 +11477,7 @@ wwv_flow_api.create_page_plug(
 );
 wwv_flow_api.create_page_button(
  p_id=>wwv_flow_api.id(20152349414264028)
-,p_button_sequence=>20
+,p_button_sequence=>30
 ,p_button_plug_id=>wwv_flow_api.id(20152107753264026)
 ,p_button_name=>'Start'
 ,p_button_action=>'DEFINED_BY_DA'
@@ -11492,7 +11492,7 @@ wwv_flow_api.create_page_button(
 );
 wwv_flow_api.create_page_button(
  p_id=>wwv_flow_api.id(20154488244264049)
-,p_button_sequence=>30
+,p_button_sequence=>40
 ,p_button_plug_id=>wwv_flow_api.id(20152107753264026)
 ,p_button_name=>'Stop'
 ,p_button_action=>'DEFINED_BY_DA'
@@ -11506,7 +11506,7 @@ wwv_flow_api.create_page_button(
 );
 wwv_flow_api.create_page_button(
  p_id=>wwv_flow_api.id(21753082337936331)
-,p_button_sequence=>40
+,p_button_sequence=>50
 ,p_button_plug_id=>wwv_flow_api.id(20152107753264026)
 ,p_button_name=>'Aktualisieren'
 ,p_button_action=>'REDIRECT_PAGE'
@@ -11544,6 +11544,14 @@ wwv_flow_api.create_page_item(
 ,p_attribute_04=>'TEXT'
 ,p_attribute_05=>'BOTH'
 );
+wwv_flow_api.create_page_item(
+ p_id=>wwv_flow_api.id(23650066468990202)
+,p_name=>'P4_NAME_AUSGEWAEHLTES_PROJEKT'
+,p_item_sequence=>20
+,p_item_plug_id=>wwv_flow_api.id(20152107753264026)
+,p_display_as=>'NATIVE_HIDDEN'
+,p_attribute_01=>'Y'
+);
 wwv_flow_api.create_page_da_event(
  p_id=>wwv_flow_api.id(20153553464264040)
 ,p_name=>'Auswahlwechsel'
@@ -11561,12 +11569,13 @@ wwv_flow_api.create_page_da_action(
 ,p_execute_on_page_init=>'N'
 ,p_action=>'NATIVE_JAVASCRIPT_CODE'
 ,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
-'var i, selectedIds = "", model = this.data.model; ',
+'var i, selectedIds = "", selectedProjektName = "", model = this.data.model; ',
 'for ( i = 0; i < this.data.selectedRecords.length; i++ ) {      ',
-'    selectedIds += model.getValue( this.data.selectedRecords[i], "ID"); ',
+'    $s("P4_ID_AUSGEWAEHLTES_PROJEKT", model.getValue( this.data.selectedRecords[i], "ID"));',
+'    $s("P4_NAME_AUSGEWAEHLTES_PROJEKT", model.getValue( this.data.selectedRecords[i], "NAME"));',
 '    break;',
 '} ',
-'$s("P4_ID_AUSGEWAEHLTES_PROJEKT", selectedIds);'))
+''))
 );
 wwv_flow_api.create_page_da_event(
  p_id=>wwv_flow_api.id(20153960664264044)
@@ -11655,19 +11664,19 @@ wwv_flow_api.create_page_da_action(
 '});'))
 );
 wwv_flow_api.create_page_da_event(
- p_id=>wwv_flow_api.id(21750194435936302)
-,p_name=>unistr('Projekt  ausgew\00E4hlt')
+ p_id=>wwv_flow_api.id(23650174188990203)
+,p_name=>'AusgewaehtlesProjektGleichAktivesProjekt'
 ,p_event_sequence=>40
 ,p_triggering_element_type=>'ITEM'
-,p_triggering_element=>'P4_ID_AUSGEWAEHLTES_PROJEKT'
-,p_condition_element=>'P4_ID_AUSGEWAEHLTES_PROJEKT'
-,p_triggering_condition_type=>'NOT_NULL'
+,p_triggering_element=>'P4_NAME_AUSGEWAEHLTES_PROJEKT'
+,p_triggering_condition_type=>'JAVASCRIPT_EXPRESSION'
+,p_triggering_expression=>'$v("P4_NAME_AUSGEWAEHLTES_PROJEKT") != null && $v("P4_NAME_AUSGEWAEHLTES_PROJEKT") != $v("AKTIVES_PROJEKT")'
 ,p_bind_type=>'bind'
 ,p_bind_event_type=>'change'
 );
 wwv_flow_api.create_page_da_action(
- p_id=>wwv_flow_api.id(21750290973936303)
-,p_event_id=>wwv_flow_api.id(21750194435936302)
+ p_id=>wwv_flow_api.id(23650264924990204)
+,p_event_id=>wwv_flow_api.id(23650174188990203)
 ,p_event_result=>'TRUE'
 ,p_action_sequence=>10
 ,p_execute_on_page_init=>'Y'
@@ -11676,14 +11685,76 @@ wwv_flow_api.create_page_da_action(
 ,p_affected_button_id=>wwv_flow_api.id(20152349414264028)
 );
 wwv_flow_api.create_page_da_action(
- p_id=>wwv_flow_api.id(21750359290936304)
-,p_event_id=>wwv_flow_api.id(21750194435936302)
+ p_id=>wwv_flow_api.id(23650365799990205)
+,p_event_id=>wwv_flow_api.id(23650174188990203)
 ,p_event_result=>'FALSE'
 ,p_action_sequence=>10
 ,p_execute_on_page_init=>'Y'
 ,p_action=>'NATIVE_DISABLE'
 ,p_affected_elements_type=>'BUTTON'
 ,p_affected_button_id=>wwv_flow_api.id(20152349414264028)
+);
+wwv_flow_api.create_page_da_event(
+ p_id=>wwv_flow_api.id(23650425190990206)
+,p_name=>'AusgewaehltesProjektGleichAktivesProjekt'
+,p_event_sequence=>50
+,p_triggering_element_type=>'ITEM'
+,p_triggering_element=>'AKTIVES_PROJEKT'
+,p_triggering_condition_type=>'JAVASCRIPT_EXPRESSION'
+,p_triggering_expression=>'$v("P4_NAME_AUSGEWAEHLTES_PROJEKT") != null && $v("P4_NAME_AUSGEWAEHLTES_PROJEKT") != $v("AKTIVES_PROJEKT")'
+,p_bind_type=>'bind'
+,p_bind_event_type=>'change'
+);
+wwv_flow_api.create_page_da_action(
+ p_id=>wwv_flow_api.id(23650577174990207)
+,p_event_id=>wwv_flow_api.id(23650425190990206)
+,p_event_result=>'TRUE'
+,p_action_sequence=>10
+,p_execute_on_page_init=>'Y'
+,p_action=>'NATIVE_ENABLE'
+,p_affected_elements_type=>'BUTTON'
+,p_affected_button_id=>wwv_flow_api.id(20152349414264028)
+);
+wwv_flow_api.create_page_da_action(
+ p_id=>wwv_flow_api.id(23650680716990208)
+,p_event_id=>wwv_flow_api.id(23650425190990206)
+,p_event_result=>'FALSE'
+,p_action_sequence=>10
+,p_execute_on_page_init=>'Y'
+,p_action=>'NATIVE_DISABLE'
+,p_affected_elements_type=>'BUTTON'
+,p_affected_button_id=>wwv_flow_api.id(20152349414264028)
+);
+wwv_flow_api.create_page_da_event(
+ p_id=>wwv_flow_api.id(23650757991990209)
+,p_name=>'ProjektAktiv'
+,p_event_sequence=>60
+,p_triggering_element_type=>'ITEM'
+,p_triggering_element=>'AKTIVES_PROJEKT'
+,p_condition_element=>'AKTIVES_PROJEKT'
+,p_triggering_condition_type=>'NOT_NULL'
+,p_bind_type=>'bind'
+,p_bind_event_type=>'change'
+);
+wwv_flow_api.create_page_da_action(
+ p_id=>wwv_flow_api.id(23650870311990210)
+,p_event_id=>wwv_flow_api.id(23650757991990209)
+,p_event_result=>'TRUE'
+,p_action_sequence=>10
+,p_execute_on_page_init=>'Y'
+,p_action=>'NATIVE_ENABLE'
+,p_affected_elements_type=>'BUTTON'
+,p_affected_button_id=>wwv_flow_api.id(20154488244264049)
+);
+wwv_flow_api.create_page_da_action(
+ p_id=>wwv_flow_api.id(23650931173990211)
+,p_event_id=>wwv_flow_api.id(23650757991990209)
+,p_event_result=>'FALSE'
+,p_action_sequence=>10
+,p_execute_on_page_init=>'Y'
+,p_action=>'NATIVE_DISABLE'
+,p_affected_elements_type=>'BUTTON'
+,p_affected_button_id=>wwv_flow_api.id(20154488244264049)
 );
 wwv_flow_api.create_page_process(
  p_id=>wwv_flow_api.id(21751980831936320)
