@@ -28,12 +28,12 @@ prompt APPLICATION 100 - Stechuhr
 -- Application Export:
 --   Application:     100
 --   Name:            Stechuhr
---   Date and Time:   18:52 Donnerstag März 25, 2021
+--   Date and Time:   17:52 Freitag März 26, 2021
 --   Exported By:     CHHAPEX
 --   Flashback:       0
 --   Export Type:     Application Export
 --     Pages:                      7
---       Items:                    9
+--       Items:                   10
 --       Computations:             3
 --       Processes:                7
 --       Regions:                 18
@@ -115,7 +115,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Stechuhr'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210325183457'
+,p_last_upd_yyyymmddhh24miss=>'20210326173918'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -11244,7 +11244,7 @@ wwv_flow_api.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210325183457'
+,p_last_upd_yyyymmddhh24miss=>'20210326173918'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(20152002939264025)
@@ -11535,14 +11535,15 @@ wwv_flow_api.create_page_item(
 ,p_prompt=>'Aktives Projekt'
 ,p_source=>'select su_pk_aktionen.get_name_aktives_projekt() from dual;'
 ,p_source_type=>'QUERY'
-,p_display_as=>'NATIVE_TEXT_FIELD'
+,p_display_as=>'NATIVE_DATE_PICKER'
 ,p_cSize=>30
+,p_colspan=>2
+,p_grid_column=>1
 ,p_field_template=>wwv_flow_api.id(16768460827921950)
 ,p_item_template_options=>'#DEFAULT#'
-,p_attribute_01=>'N'
-,p_attribute_02=>'N'
-,p_attribute_04=>'TEXT'
-,p_attribute_05=>'BOTH'
+,p_attribute_04=>'button'
+,p_attribute_05=>'N'
+,p_attribute_07=>'NONE'
 );
 wwv_flow_api.create_page_item(
  p_id=>wwv_flow_api.id(23650066468990202)
@@ -11551,6 +11552,28 @@ wwv_flow_api.create_page_item(
 ,p_item_plug_id=>wwv_flow_api.id(20152107753264026)
 ,p_display_as=>'NATIVE_HIDDEN'
 ,p_attribute_01=>'Y'
+);
+wwv_flow_api.create_page_item(
+ p_id=>wwv_flow_api.id(23651127055990213)
+,p_name=>'AKTIVES_START_DATUM'
+,p_item_sequence=>20
+,p_item_plug_id=>wwv_flow_api.id(21752026900936321)
+,p_use_cache_before_default=>'NO'
+,p_prompt=>'Startzeit'
+,p_source=>'su_pk_aktionen.get_letzte_offen_start_zeit()'
+,p_source_type=>'EXPRESSION'
+,p_source_language=>'PLSQL'
+,p_display_as=>'NATIVE_TEXT_FIELD'
+,p_cSize=>30
+,p_begin_on_new_line=>'N'
+,p_colspan=>2
+,p_grid_column=>3
+,p_field_template=>wwv_flow_api.id(16768460827921950)
+,p_item_template_options=>'#DEFAULT#'
+,p_attribute_01=>'N'
+,p_attribute_02=>'N'
+,p_attribute_04=>'TEXT'
+,p_attribute_05=>'BOTH'
 );
 wwv_flow_api.create_page_da_event(
  p_id=>wwv_flow_api.id(20153553464264040)
@@ -11595,10 +11618,10 @@ wwv_flow_api.create_page_da_action(
 ,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
 ,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
 'begin',
-'  SU_PK_AKTIONEN.start_projekt(:P4_ID_AUSGEWAEHLTES_PROJEKT, :AKTIVES_PROJEKT);',
+'  SU_PK_AKTIONEN.start_projekt(:P4_ID_AUSGEWAEHLTES_PROJEKT, :AKTIVES_PROJEKT, :AKTIVES_START_DATUM);',
 'end;  '))
 ,p_attribute_02=>'P4_ID_AUSGEWAEHLTES_PROJEKT'
-,p_attribute_03=>'AKTIVES_PROJEKT'
+,p_attribute_03=>'AKTIVES_PROJEKT, AKTIVES_START_DATUM'
 ,p_attribute_04=>'N'
 ,p_attribute_05=>'PLSQL'
 ,p_wait_for_result=>'Y'
@@ -11640,9 +11663,9 @@ wwv_flow_api.create_page_da_action(
 ,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
 ,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
 'begin',
-'  SU_PK_AKTIONEN.stop(:AKTIVES_PROJEKT);',
+'  SU_PK_AKTIONEN.stop(:AKTIVES_PROJEKT,:AKTIVES_START_DATUM);',
 'end;  '))
-,p_attribute_03=>'AKTIVES_PROJEKT'
+,p_attribute_03=>'AKTIVES_PROJEKT, AKTIVES_START_DATUM'
 ,p_attribute_04=>'N'
 ,p_attribute_05=>'PLSQL'
 ,p_wait_for_result=>'Y'
