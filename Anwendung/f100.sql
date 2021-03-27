@@ -28,7 +28,7 @@ prompt APPLICATION 100 - Stechuhr
 -- Application Export:
 --   Application:     100
 --   Name:            Stechuhr
---   Date and Time:   17:52 Freitag März 26, 2021
+--   Date and Time:   15:09 Samstag März 27, 2021
 --   Exported By:     CHHAPEX
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -38,7 +38,7 @@ prompt APPLICATION 100 - Stechuhr
 --       Processes:                7
 --       Regions:                 18
 --       Buttons:                  5
---       Dynamic Actions:         13
+--       Dynamic Actions:         14
 --     Shared Components:
 --       Logic:
 --       Navigation:
@@ -115,7 +115,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Stechuhr'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210326173918'
+,p_last_upd_yyyymmddhh24miss=>'20210327150530'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -11244,7 +11244,7 @@ wwv_flow_api.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210326173918'
+,p_last_upd_yyyymmddhh24miss=>'20210327150530'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(20152002939264025)
@@ -11778,6 +11778,52 @@ wwv_flow_api.create_page_da_action(
 ,p_action=>'NATIVE_DISABLE'
 ,p_affected_elements_type=>'BUTTON'
 ,p_affected_button_id=>wwv_flow_api.id(20154488244264049)
+);
+wwv_flow_api.create_page_da_event(
+ p_id=>wwv_flow_api.id(23651533608990217)
+,p_name=>'DatumNichtVonHeute'
+,p_event_sequence=>70
+,p_triggering_element_type=>'ITEM'
+,p_triggering_element=>'AKTIVES_START_DATUM'
+,p_bind_type=>'live'
+,p_bind_event_type=>'change'
+);
+wwv_flow_api.create_page_da_action(
+ p_id=>wwv_flow_api.id(23651655862990218)
+,p_event_id=>wwv_flow_api.id(23651533608990217)
+,p_event_result=>'TRUE'
+,p_action_sequence=>10
+,p_execute_on_page_init=>'Y'
+,p_action=>'NATIVE_JAVASCRIPT_CODE'
+,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'var d = new Date();',
+'var a = $v("AKTIVES_START_DATUM");',
+'var unterschied = false;',
+'',
+'',
+'if (a != null && a!= '''') {',
+'    ',
+'    const aJahr = parseInt(a.substr(0,4));',
+'    const aMonat = parseInt(a.substr(5,2));',
+'    const aTag = parseInt(a.substr(8,2));',
+'',
+'    const dJahr = d.getFullYear();',
+'    const dMonat = d.getMonth() + 1;',
+'    const dTag = d.getDate();',
+'  ',
+'    ',
+'    ',
+'    if (aJahr != dJahr || aMonat != dMonat || aTag != dTag) {',
+'        unterschied = true;        ',
+'    }',
+'}',
+'',
+'if (unterschied) {',
+'    $(''#AKTIVES_START_DATUM'').css(''border-color'',''red'');',
+'} else {',
+'    $(''#AKTIVES_START_DATUM'').css(''border-color'',''black'');',
+'}',
+''))
 );
 wwv_flow_api.create_page_process(
  p_id=>wwv_flow_api.id(21751980831936320)
