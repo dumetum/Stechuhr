@@ -28,7 +28,7 @@ prompt APPLICATION 100 - Stechuhr
 -- Application Export:
 --   Application:     100
 --   Name:            Stechuhr
---   Date and Time:   15:09 Samstag März 27, 2021
+--   Date and Time:   15:40 Samstag März 27, 2021
 --   Exported By:     CHHAPEX
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -115,7 +115,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Stechuhr'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210327150530'
+,p_last_upd_yyyymmddhh24miss=>'20210327153808'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -11244,7 +11244,7 @@ wwv_flow_api.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210327150530'
+,p_last_upd_yyyymmddhh24miss=>'20210327153607'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(20152002939264025)
@@ -11343,14 +11343,12 @@ wwv_flow_api.create_region_column(
 ,p_source_expression=>'NAME'
 ,p_data_type=>'VARCHAR2'
 ,p_is_query_only=>false
-,p_item_type=>'NATIVE_TEXT_FIELD'
+,p_item_type=>'NATIVE_DISPLAY_ONLY'
 ,p_heading=>'Name'
 ,p_heading_alignment=>'LEFT'
 ,p_display_sequence=>40
 ,p_value_alignment=>'LEFT'
-,p_attribute_05=>'BOTH'
-,p_is_required=>false
-,p_max_length=>30
+,p_attribute_02=>'VALUE'
 ,p_enable_filter=>true
 ,p_filter_operators=>'C:S:CASE_INSENSITIVE:REGEXP'
 ,p_filter_is_required=>false
@@ -11365,6 +11363,7 @@ wwv_flow_api.create_region_column(
 ,p_is_primary_key=>false
 ,p_duplicate_value=>true
 ,p_include_in_export=>true
+,p_escape_on_http_output=>true
 );
 wwv_flow_api.create_region_column(
  p_id=>wwv_flow_api.id(21750443102936305)
@@ -11373,17 +11372,13 @@ wwv_flow_api.create_region_column(
 ,p_source_expression=>'AKTIV'
 ,p_data_type=>'VARCHAR2'
 ,p_is_query_only=>false
-,p_item_type=>'NATIVE_TEXTAREA'
+,p_item_type=>'NATIVE_TEXT_FIELD'
 ,p_heading=>'Aktiv'
 ,p_heading_alignment=>'LEFT'
 ,p_display_sequence=>50
 ,p_value_alignment=>'LEFT'
-,p_attribute_01=>'Y'
-,p_attribute_02=>'N'
-,p_attribute_03=>'N'
-,p_attribute_04=>'BOTH'
+,p_attribute_05=>'BOTH'
 ,p_is_required=>false
-,p_max_length=>32767
 ,p_enable_filter=>true
 ,p_filter_operators=>'C:S:CASE_INSENSITIVE:REGEXP'
 ,p_filter_is_required=>false
@@ -11395,6 +11390,8 @@ wwv_flow_api.create_region_column(
 ,p_is_primary_key=>false
 ,p_duplicate_value=>true
 ,p_include_in_export=>true
+,p_readonly_condition_type=>'NEVER'
+,p_readonly_for_each_row=>false
 );
 wwv_flow_api.create_interactive_grid(
  p_id=>wwv_flow_api.id(21261881956776358)
@@ -11535,15 +11532,17 @@ wwv_flow_api.create_page_item(
 ,p_prompt=>'Aktives Projekt'
 ,p_source=>'select su_pk_aktionen.get_name_aktives_projekt() from dual;'
 ,p_source_type=>'QUERY'
-,p_display_as=>'NATIVE_DATE_PICKER'
+,p_display_as=>'NATIVE_TEXT_FIELD'
 ,p_cSize=>30
 ,p_colspan=>2
 ,p_grid_column=>1
 ,p_field_template=>wwv_flow_api.id(16768460827921950)
 ,p_item_template_options=>'#DEFAULT#'
-,p_attribute_04=>'button'
-,p_attribute_05=>'N'
-,p_attribute_07=>'NONE'
+,p_attribute_01=>'N'
+,p_attribute_02=>'Y'
+,p_attribute_03=>'N'
+,p_attribute_04=>'TEXT'
+,p_attribute_05=>'BOTH'
 );
 wwv_flow_api.create_page_item(
  p_id=>wwv_flow_api.id(23650066468990202)
@@ -11571,7 +11570,8 @@ wwv_flow_api.create_page_item(
 ,p_field_template=>wwv_flow_api.id(16768460827921950)
 ,p_item_template_options=>'#DEFAULT#'
 ,p_attribute_01=>'N'
-,p_attribute_02=>'N'
+,p_attribute_02=>'Y'
+,p_attribute_03=>'N'
 ,p_attribute_04=>'TEXT'
 ,p_attribute_05=>'BOTH'
 );
@@ -11796,6 +11796,9 @@ wwv_flow_api.create_page_da_action(
 ,p_execute_on_page_init=>'Y'
 ,p_action=>'NATIVE_JAVASCRIPT_CODE'
 ,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
+unistr('console.log("Aktives Startdatum ge\00E4ndert");'),
+'console.log("Border: " + $(''#AKTIVES_START_DATUM'').css(''border-color''));',
+'',
 'var d = new Date();',
 'var a = $v("AKTIVES_START_DATUM");',
 'var unterschied = false;',
@@ -11819,9 +11822,11 @@ wwv_flow_api.create_page_da_action(
 '}',
 '',
 'if (unterschied) {',
+'    console.log("Unterschied");',
 '    $(''#AKTIVES_START_DATUM'').css(''border-color'',''red'');',
 '} else {',
-'    $(''#AKTIVES_START_DATUM'').css(''border-color'',''black'');',
+'    console.log("Kein Unterschied");',
+'    $(''#AKTIVES_START_DATUM'').css(''border-color'',''rgb(223, 223, 223)'');',
 '}',
 ''))
 );
@@ -11857,7 +11862,7 @@ wwv_flow_api.create_page(
 ,p_navigation_list_template_id=>wwv_flow_api.id(16766367043921946)
 ,p_nav_list_template_options=>'#DEFAULT#:js-navCollapsed--hidden:t-TreeNav--styleA'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210324181601'
+,p_last_upd_yyyymmddhh24miss=>'20210327153808'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(22193762863745781)
@@ -12899,7 +12904,7 @@ wwv_flow_api.create_page_item(
 ,p_display_as=>'NATIVE_DATE_PICKER'
 ,p_cSize=>30
 ,p_begin_on_new_line=>'N'
-,p_colspan=>1
+,p_colspan=>2
 ,p_field_template=>wwv_flow_api.id(16768460827921950)
 ,p_item_template_options=>'#DEFAULT#'
 ,p_attribute_04=>'button'
@@ -12915,7 +12920,7 @@ wwv_flow_api.create_page_item(
 ,p_display_as=>'NATIVE_DATE_PICKER'
 ,p_cSize=>30
 ,p_begin_on_new_line=>'N'
-,p_colspan=>1
+,p_colspan=>2
 ,p_field_template=>wwv_flow_api.id(16768460827921950)
 ,p_item_template_options=>'#DEFAULT#'
 ,p_attribute_04=>'button'
