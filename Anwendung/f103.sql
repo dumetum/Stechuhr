@@ -28,7 +28,7 @@ prompt APPLICATION 103 - Erinnerung
 -- Application Export:
 --   Application:     103
 --   Name:            Erinnerung
---   Date and Time:   15:48 Sonntag März 21, 2021
+--   Date and Time:   16:10 Donnerstag April 8, 2021
 --   Exported By:     CHHAPEX
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -36,7 +36,8 @@ prompt APPLICATION 103 - Erinnerung
 --       Items:                    3
 --       Processes:                5
 --       Regions:                  3
---       Buttons:                  2
+--       Buttons:                  3
+--       Dynamic Actions:          1
 --     Shared Components:
 --       Logic:
 --       Navigation:
@@ -113,7 +114,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Erinnerung'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210321154223'
+,p_last_upd_yyyymmddhh24miss=>'20210405111133'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -10846,11 +10847,12 @@ wwv_flow_api.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210321154223'
+,p_last_upd_yyyymmddhh24miss=>'20210405111133'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(46060962539000447)
 ,p_plug_name=>'Erinnerungen'
+,p_region_name=>'er_reg'
 ,p_region_template_options=>'#DEFAULT#'
 ,p_component_template_options=>'#DEFAULT#'
 ,p_plug_template=>wwv_flow_api.id(22906556557321817)
@@ -10920,11 +10922,11 @@ wwv_flow_api.create_interactive_grid(
 ,p_is_editable=>true
 ,p_edit_operations=>'i:u:d'
 ,p_lost_update_check_type=>'VALUES'
-,p_add_row_if_empty=>true
+,p_add_row_if_empty=>false
 ,p_submit_checked_rows=>false
 ,p_lazy_loading=>false
 ,p_requires_filter=>false
-,p_select_first_row=>true
+,p_select_first_row=>false
 ,p_fixed_row_height=>true
 ,p_pagination_type=>'SCROLL'
 ,p_show_total_row_count=>true
@@ -10946,14 +10948,39 @@ wwv_flow_api.create_interactive_grid(
 '    // this is the group with the action=add row',
 '    toolbarGroup = toolbarData.toolbarFind("actions3");',
 '',
-'toolbarGroup.controls.push({',
+'    toolbarGroup.controls.push({',
 '                type: "BUTTON",',
 '                action: "selection-delete",',
-'                icon: "icon-ig-delete",     // alternative FontAwesome icon: "fa fa-trash",',
 '                iconBeforeLabel: true,',
-'                hot: true',
+'                icon: "icon-ig-delete",',
+'                label: " ",',
+'                hot: false',
 '                 });',
 '',
+unistr('    /* Cancel-Knopf: Was w\00E4re die Cancel-Aktion? '),
+'    toolbarGroup.controls.push({',
+'                type: "BUTTON",',
+'                iconBeforeLabel: false,',
+'                label: "C",',
+'                hot: false',
+'                 });     ',
+'    */            ',
+'',
+'    let saveAction    = toolbarData.toolbarFind("save");',
+'    saveAction.hot = false;',
+'    saveAction.iconBeforeLabel = true;',
+'    saveAction.label = " ";',
+'    saveAction.icon ="icon-ig-save-as";',
+'',
+'    let addrowAction  = toolbarData.toolbarFind("selection-add-row");',
+'    addrowAction.iconBeforeLabel = true;',
+'    addrowAction.label = " ";',
+'    addrowAction.icon ="icon-ig-add-row";',
+'',
+'    let editAction    = toolbarData.toolbarFind("edit");',
+'    editAction.iconBeforeLabel = true;',
+'    editAction.label = "E";',
+'    ',
 '    config.toolbarData = toolbarData;',
 '    return config;',
 '}'))
@@ -10992,6 +11019,19 @@ wwv_flow_api.create_ig_report_column(
 ,p_is_frozen=>false
 );
 wwv_flow_api.create_page_button(
+ p_id=>wwv_flow_api.id(23256317099648835)
+,p_button_sequence=>10
+,p_button_plug_id=>wwv_flow_api.id(46060962539000447)
+,p_button_name=>'Speichern'
+,p_button_action=>'DEFINED_BY_DA'
+,p_button_template_options=>'#DEFAULT#'
+,p_button_template_id=>wwv_flow_api.id(22970937915321871)
+,p_button_image_alt=>'Speichern'
+,p_button_position=>'REGION_TEMPLATE_NEXT'
+,p_button_execute_validations=>'N'
+,p_warn_on_unsaved_changes=>null
+);
+wwv_flow_api.create_page_button(
  p_id=>wwv_flow_api.id(21754300390936344)
 ,p_button_sequence=>20
 ,p_button_plug_id=>wwv_flow_api.id(46060962539000447)
@@ -11003,6 +11043,24 @@ wwv_flow_api.create_page_button(
 ,p_button_image_alt=>'Abbrechen'
 ,p_button_position=>'REGION_TEMPLATE_NEXT'
 ,p_button_redirect_url=>'f?p=&APP_ID.:1:&SESSION.::&DEBUG.:::'
+);
+wwv_flow_api.create_page_da_event(
+ p_id=>wwv_flow_api.id(23651939426990221)
+,p_name=>'Speichern'
+,p_event_sequence=>10
+,p_triggering_element_type=>'BUTTON'
+,p_triggering_button_id=>wwv_flow_api.id(23256317099648835)
+,p_bind_type=>'bind'
+,p_bind_event_type=>'click'
+);
+wwv_flow_api.create_page_da_action(
+ p_id=>wwv_flow_api.id(23652048657990222)
+,p_event_id=>wwv_flow_api.id(23651939426990221)
+,p_event_result=>'TRUE'
+,p_action_sequence=>10
+,p_execute_on_page_init=>'N'
+,p_action=>'NATIVE_JAVASCRIPT_CODE'
+,p_attribute_01=>'apex.region("er_reg").widget().interactiveGrid("getActions").invoke("save");'
 );
 wwv_flow_api.create_page_process(
  p_id=>wwv_flow_api.id(21754258375936343)

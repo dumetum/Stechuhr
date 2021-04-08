@@ -28,16 +28,16 @@ prompt APPLICATION 100 - Stechuhr
 -- Application Export:
 --   Application:     100
 --   Name:            Stechuhr
---   Date and Time:   15:40 Samstag März 27, 2021
+--   Date and Time:   16:09 Donnerstag April 8, 2021
 --   Exported By:     CHHAPEX
 --   Flashback:       0
 --   Export Type:     Application Export
 --     Pages:                      7
---       Items:                   10
+--       Items:                   11
 --       Computations:             3
---       Processes:                7
+--       Processes:                6
 --       Regions:                 18
---       Buttons:                  5
+--       Buttons:                  6
 --       Dynamic Actions:         14
 --     Shared Components:
 --       Logic:
@@ -115,7 +115,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Stechuhr'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210327153808'
+,p_last_upd_yyyymmddhh24miss=>'20210408160636'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -11242,9 +11242,55 @@ wwv_flow_api.create_page(
 ,p_step_title=>'Armaturenbrett'
 ,p_warn_on_unsaved_changes=>'N'
 ,p_autocomplete_on_off=>'OFF'
+,p_javascript_code=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'function refreshArmaturenbrett() {',
+'    var model = apex.region("armaturenbrett").widget().interactiveGrid("getViews", "grid").model;',
+'    model.forEach(function(r) {',
+'        var record = r;',
+'        model.setValue(record,"AKTIV", "N");',
+'        console.log($v("P4_ID_AUSGEWAEHLTES_PROJEKT"));',
+'        if (model.getValue(record,"ID") === $v("P4_ID_AUSGEWAEHLTES_PROJEKT")) {',
+'            model.setValue(record,"AKTIV", "J");',
+'        }',
+'    });',
+'}',
+'',
+'function setzeAllesAufN() {',
+'    var model = apex.region("armaturenbrett").widget().interactiveGrid("getViews", "grid").model;',
+'    model.forEach(function(r) {',
+'        var record = r;',
+'        model.setValue(record,"AKTIV", "N");',
+'    });    ',
+'}',
+'',
+'function aktivesStartdatumNichtHeute() {',
+'    var d = new Date();',
+'    var a = $v("AKTIVES_START_DATUM");',
+'    var unterschied = false;',
+'',
+'',
+'    if (a != null && a!= '''') {',
+'        ',
+'        const aJahr = parseInt(a.substr(0,4));',
+'        const aMonat = parseInt(a.substr(5,2));',
+'        const aTag = parseInt(a.substr(8,2));',
+'',
+'        const dJahr = d.getFullYear();',
+'        const dMonat = d.getMonth() + 1;',
+'        const dTag = d.getDate();',
+'    ',
+'        ',
+'        ',
+'        if (aJahr != dJahr || aMonat != dMonat || aTag != dTag) {',
+'            unterschied = true;        ',
+'        }',
+'    }   ',
+'',
+'    return unterschied; ',
+'}'))
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'CHHAPEX'
-,p_last_upd_yyyymmddhh24miss=>'20210327153607'
+,p_last_upd_yyyymmddhh24miss=>'20210408160636'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(20152002939264025)
@@ -11488,6 +11534,19 @@ wwv_flow_api.create_page_button(
 ,p_grid_new_column=>'N'
 );
 wwv_flow_api.create_page_button(
+ p_id=>wwv_flow_api.id(23652214507990224)
+,p_button_sequence=>30
+,p_button_plug_id=>wwv_flow_api.id(21752026900936321)
+,p_button_name=>'Stop_um'
+,p_button_action=>'SUBMIT'
+,p_button_template_options=>'#DEFAULT#'
+,p_button_template_id=>wwv_flow_api.id(16769526542921955)
+,p_button_image_alt=>'Stop um'
+,p_button_position=>'BODY'
+,p_grid_new_row=>'N'
+,p_grid_new_column=>'Y'
+);
+wwv_flow_api.create_page_button(
  p_id=>wwv_flow_api.id(20154488244264049)
 ,p_button_sequence=>40
 ,p_button_plug_id=>wwv_flow_api.id(20152107753264026)
@@ -11575,6 +11634,21 @@ wwv_flow_api.create_page_item(
 ,p_attribute_04=>'TEXT'
 ,p_attribute_05=>'BOTH'
 );
+wwv_flow_api.create_page_item(
+ p_id=>wwv_flow_api.id(23652360838990225)
+,p_name=>'P4_STOP_UM'
+,p_item_sequence=>40
+,p_item_plug_id=>wwv_flow_api.id(21752026900936321)
+,p_prompt=>'Stop um'
+,p_display_as=>'NATIVE_DATE_PICKER'
+,p_cSize=>30
+,p_begin_on_new_line=>'N'
+,p_field_template=>wwv_flow_api.id(16768460827921950)
+,p_item_template_options=>'#DEFAULT#'
+,p_attribute_04=>'button'
+,p_attribute_05=>'N'
+,p_attribute_07=>'NONE'
+);
 wwv_flow_api.create_page_da_event(
  p_id=>wwv_flow_api.id(20153553464264040)
 ,p_name=>'Auswahlwechsel'
@@ -11633,17 +11707,7 @@ wwv_flow_api.create_page_da_action(
 ,p_action_sequence=>40
 ,p_execute_on_page_init=>'N'
 ,p_action=>'NATIVE_JAVASCRIPT_CODE'
-,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
-'var model = apex.region("armaturenbrett").widget().interactiveGrid("getViews", "grid").model;',
-'model.forEach(function(r) {',
-'    var record = r;',
-'    model.setValue(record,"AKTIV", "N");',
-'    console.log($v("P4_ID_AUSGEWAEHLTES_PROJEKT"));',
-'    if (model.getValue(record,"ID") === $v("P4_ID_AUSGEWAEHLTES_PROJEKT")) {',
-'        model.setValue(record,"AKTIV", "J");',
-'    }',
-'});',
-''))
+,p_attribute_01=>'refreshArmaturenbrett();'
 );
 wwv_flow_api.create_page_da_event(
  p_id=>wwv_flow_api.id(20154527798264050)
@@ -11679,12 +11743,7 @@ wwv_flow_api.create_page_da_action(
 ,p_action=>'NATIVE_JAVASCRIPT_CODE'
 ,p_affected_elements_type=>'REGION'
 ,p_affected_region_id=>wwv_flow_api.id(21261366688776358)
-,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
-'var model = apex.region("armaturenbrett").widget().interactiveGrid("getViews", "grid").model;',
-'model.forEach(function(r) {',
-'    var record = r;',
-'    model.setValue(record,"AKTIV", "N");',
-'});'))
+,p_attribute_01=>'setzeAllesAufN();'
 );
 wwv_flow_api.create_page_da_event(
  p_id=>wwv_flow_api.id(23650174188990203)
@@ -11785,6 +11844,8 @@ wwv_flow_api.create_page_da_event(
 ,p_event_sequence=>70
 ,p_triggering_element_type=>'ITEM'
 ,p_triggering_element=>'AKTIVES_START_DATUM'
+,p_triggering_condition_type=>'JAVASCRIPT_EXPRESSION'
+,p_triggering_expression=>'aktivesStartdatumNichtHeute();'
 ,p_bind_type=>'live'
 ,p_bind_event_type=>'change'
 );
@@ -11796,52 +11857,22 @@ wwv_flow_api.create_page_da_action(
 ,p_execute_on_page_init=>'Y'
 ,p_action=>'NATIVE_JAVASCRIPT_CODE'
 ,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
-unistr('console.log("Aktives Startdatum ge\00E4ndert");'),
-'console.log("Border: " + $(''#AKTIVES_START_DATUM'').css(''border-color''));',
 '',
-'var d = new Date();',
-'var a = $v("AKTIVES_START_DATUM");',
-'var unterschied = false;',
-'',
-'',
-'if (a != null && a!= '''') {',
-'    ',
-'    const aJahr = parseInt(a.substr(0,4));',
-'    const aMonat = parseInt(a.substr(5,2));',
-'    const aTag = parseInt(a.substr(8,2));',
-'',
-'    const dJahr = d.getFullYear();',
-'    const dMonat = d.getMonth() + 1;',
-'    const dTag = d.getDate();',
-'  ',
-'    ',
-'    ',
-'    if (aJahr != dJahr || aMonat != dMonat || aTag != dTag) {',
-'        unterschied = true;        ',
-'    }',
-'}',
-'',
-'if (unterschied) {',
-'    console.log("Unterschied");',
-'    $(''#AKTIVES_START_DATUM'').css(''border-color'',''red'');',
-'} else {',
-'    console.log("Kein Unterschied");',
-'    $(''#AKTIVES_START_DATUM'').css(''border-color'',''rgb(223, 223, 223)'');',
-'}',
+'console.log("Unterschied");',
+'$(''#AKTIVES_START_DATUM'').css(''border-color'',''red'');',
 ''))
 );
-wwv_flow_api.create_page_process(
- p_id=>wwv_flow_api.id(21751980831936320)
-,p_process_sequence=>10
-,p_process_point=>'AFTER_SUBMIT'
-,p_region_id=>wwv_flow_api.id(21261366688776358)
-,p_process_type=>'NATIVE_IG_DML'
-,p_process_name=>'Armaturenbrett - Interaktive Grid-Daten speichern'
-,p_attribute_01=>'REGION_SOURCE'
-,p_attribute_05=>'Y'
-,p_attribute_06=>'Y'
-,p_attribute_08=>'Y'
-,p_error_display_location=>'INLINE_IN_NOTIFICATION'
+wwv_flow_api.create_page_da_action(
+ p_id=>wwv_flow_api.id(23652475234990226)
+,p_event_id=>wwv_flow_api.id(23651533608990217)
+,p_event_result=>'FALSE'
+,p_action_sequence=>10
+,p_execute_on_page_init=>'N'
+,p_action=>'NATIVE_JAVASCRIPT_CODE'
+,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'console.log("Kein Unterschied");',
+'$(''#AKTIVES_START_DATUM'').css(''border-color'',''rgb(223, 223, 223)'');',
+''))
 );
 end;
 /
